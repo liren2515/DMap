@@ -90,7 +90,6 @@ def camera_proj(jts, trans, render_res, P):
 
 
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser()
     parser.add_argument('--img_root', type=str, default='../observations/Skirt')
     parser.add_argument('--seg_root', type=str, default='../observations/mask-Skirt')
@@ -113,7 +112,7 @@ if __name__ == '__main__':
     if not os.path.exists(save_folder):
         os.makedirs(save_folder)
 
-    images_list = sorted(list(set([i.split('_')[0] for i in sorted(os.listdir(seg_dir))])))
+    images_list = sorted(list(set([i.split('.')[0] for i in sorted(os.listdir(seg_dir))])))
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
@@ -136,7 +135,7 @@ if __name__ == '__main__':
         img_name = images_list[i]
 
         crop = cv2.imread(os.path.join(image_dir, '%s.png'%img_name))
-        mask_full = cv2.imread(os.path.join(seg_dir, '%s_mask_full.png'%img_name))
+        #mask_full = cv2.imread(os.path.join(seg_dir, '%s_mask_full.png'%img_name))
         w, h = crop.shape[:2]
 
         data = torch.load(os.path.join(smpl_dir, '%s_all.pt'%img_name))
@@ -177,23 +176,23 @@ if __name__ == '__main__':
         body = trimesh.Trimesh(verts[0].cpu().numpy(), smpl_model.faces)
         body = apply_rotation(np.pi, body, 'x')
         body.export(os.path.join(save_dir, '%s_body.ply'%img_name))
+
         joints[:,:,1:] *=-1
-
-
         joints_2d = transform.transform_points(joints)
         joints_2d = (-joints_2d[0,:,:2].cpu().numpy() + 1)/2*511
         
         warp_mat = get_scale_trans(pred_keypoints_2d_full, joints_2d)
 
-        size = crop.shape[1]
-        normal = cv2.imread(os.path.join(normal_dir, '%s.png'%img_name))[:,size:]
-        seg = cv2.imread(os.path.join(seg_dir, '%s_segmentation.png'%img_name))
+        #size = crop.shape[1]
+        #normal = cv2.imread(os.path.join(normal_dir, '%s.png'%img_name))[:,size:]
+        normal = cv2.imread(os.path.join(normal_dir, '%s.png'%img_name))
+        seg = cv2.imread(os.path.join(seg_dir, '%s.png'%img_name))
         
         crop_align = align_image(crop.copy(), warp_mat)
         normal_align = align_image(normal.copy(), warp_mat)
         seg_align = align_image(seg.copy(), warp_mat)
-        mask_full_align = align_image(mask_full.copy(), warp_mat)
+        #mask_full_align = align_image(mask_full.copy(), warp_mat)
         cv2.imwrite(os.path.join(save_dir, '%s_crop_align.png'%img_name), crop_align)
         cv2.imwrite(os.path.join(save_dir, '%s_normal_align.png'%img_name), normal_align)
         cv2.imwrite(os.path.join(save_dir, '%s_seg_align.png'%img_name), seg_align)
-        cv2.imwrite(os.path.join(save_dir, '%s_mask_full_align.png'%img_name), mask_full_align)
+        #cv2.imwrite(os.path.join(save_dir, '%s_mask_full_align.png'%img_name), mask_full_align)
