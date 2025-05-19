@@ -1,4 +1,4 @@
-Use the scripts under `./scripts` to recover Skirt from the prepared images in `./data`. The codes use the data from `./data` as input, and save the results to `./fitting-results` by default.
+Use the scripts under `./scripts` to recover *Skirt* from the prepared images in `./data`. The codes use the data from `./data` as input, and save the results to `./fitting-results` by default.
 ```
 cd scripts
 ```
