@@ -1,58 +1,30 @@
 # Prepare your own data for fitting
-We provide the scripts in `./data_prepare` to show how to prepare the date required by our fitting method.
+Put your raw images under `./observations/XXX`, where `XXX` is the clothing type (i.e., Tshirt/Jacket/Trousers/Skirt).
 
-## Step 0 - ECON
-Suppose you have images put at `./fitting-data/garment/images`. You first need to run [ECON](https://github.com/YuliangXiu/ECON) to get the normal and SMPL parameter estimations for the images. Detailed instructions can be found at [ECON](https://github.com/YuliangXiu/ECON).
-
-Once you have the results of ECON with the folder name of `econ`, run
-```
-mkdir ./fitting-data/garment/processed
-```
-Then copy `econ` to `./fitting-data/garment/processed`. The folder hierarchy should be
-```
-./fitting-data/garment
-└── images
-└── processed
-│   └── econ
-│       └── BNI
-│       └── obj
-|       └── png
-│       └── vid
-```
-Then run
-```
-python ./data_prepare/step0_run_ECON.py
-```
 
 ## Step 1 - Segmentation
-We use [SAM](https://github.com/facebookresearch/segment-anything) to get the segmentation masks and [SCHP](https://github.com/GoGoDuck912/Self-Correction-Human-Parsing) to assign sematic labels for the segmentation, respectively. 
+Although there are many off-the-shelf algorithms (e.g., [SCHP](https://github.com/GoGoDuck912/Self-Correction-Human-Parsing)) that can be used, we recommend using [SAM](https://github.com/facebookresearch/segment-anything) and manual processing to obtain accurate garment segmentation masks. We assign the following values for the masks of different clothing types:
+```
+Tshirt - 60
+Jacket - 120
+Trousers - 180
+Skirt - 240
+```
+After obtaining the segmentation masks, place them in  `./observations/mask-XXX`, and name the mask images using the same names as the raw images.
 
-First, you can follow the instruction of [SCHP](https://github.com/GoGoDuck912/Self-Correction-Human-Parsing) to install it and download the LIP checkpoint. Then you can use the following cmd to get the sematic segmentations.
-```
-python simple_extractor.py --dataset lip --model-restore checkpoints/lip.pth --input-dir $ROOT_PATH/fitting-data/garment/processed/crop --output-dir $ROOT_PATH/fitting-data/garment/processed/segmentation
-```
 
-Second, install [SAM](https://github.com/facebookresearch/segment-anything) and download the checkpoint of `vit_h` model.
-```
-pip install git+https://github.com/facebookresearch/segment-anything.git
-```
-Then, change the value of `sam_checkpoint` to the path where you store the `vit_h` checkpoint in `./data_prepare/step1_image_prepare.py`, and run 
-```
-python ./data_prepare/step1_image_prepare.py
-```
-Note that sometimes the segmentation results can be bad... You need to manually check them unless you have a better (reliable) model for garment segmentation.
+## Step 2 - Normal Estimation
+Use [Sappiens](https://github.com/facebookresearch/sapiens) to get the normal estimation for the raw images, and save the results in `./observations/normal-XXX`. Name the normal images using the same names as the raw images.
 
-## Step 2 - SMPL Body Parameters
-Run the following cmd to extract SMPL-X parameters from the results of ECON. 
-```
-python ./data_prepare/step2_body_prepare.py
-```
 
-Since we use the SMPL body model, to convert the SMPL-X parameters to SMPL, please refer to [smplx](https://github.com/vchoutas/smplx/tree/main/transfer_model). The extracted SMPL-X parameters are at `./fitting-data/garment/processed/bodys/smplx`. You should put the converted SMPL parameters at `./fitting-data/garment/processed/bodys/smpl`.
+## Step 3 - SMPL Body Parameters
+Use [4DHumans](https://github.com/shubham-goel/4D-Humans) to estimate the SMPL parameters for the raw images. We have included a modified demo file `demo_modified.py` in this directory, which is based on the original `demo.py` from 4DHumans. This modified file saves the necessary estimations required by our method. Place it in the root directory of your 4DHumans installation and execute it following the instructions provided in `demo.py` from 4DHumans. Make sure to include the arguments `--full_frame` and `--save_mesh` when running the script.
+
+Put results in `./observations/smpl-XXX`. You should have some files named as `xxx_all.pt`.
 
 ## Step 3 - Alignment
-To align ECON's results with the camera settings of the synthetic data used to train our model, run
+To align the above estimations with the camera setting of our model, run
 ```
-python ./data_prepare/step3_bni_prepare.py
+cd ./script
+python ./step0_align_observation.py # change arguments when necessary
 ```
-For different types of garment, you should set different values to `target_label`. See the comments of Line61-66 in `step3_bni_prepare.py`.

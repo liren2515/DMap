@@ -92,19 +92,19 @@ def camera_proj(jts, trans, render_res, P):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--img_root', type=str, default='../observations/skirt')
-    parser.add_argument('--seg_root', type=str, default='../observations/mask-skirt')
-    parser.add_argument('--normal_root', type=str, default='../observations/normal-skirt')
-    parser.add_argument('--smpl_root', type=str, default='../observations/smpl-skirt')
+    parser.add_argument('--img_root', type=str, default='../observations/Skirt')
+    parser.add_argument('--seg_root', type=str, default='../observations/mask-Skirt')
+    parser.add_argument('--normal_root', type=str, default='../observations/normal-Skirt')
+    parser.add_argument('--smpl_root', type=str, default='../observations/smpl-Skirt')
     parser.add_argument('--save_root', type=str, default='../data')
     parser.add_argument('--garment', type=str, default='Skirt')
 
     args = parser.parse_args()
 
-    img_dir = args.img_dir
-    seg_dir = args.seg_dir
-    normal_dir = args.normal_dir
-    smpl_dir = args.smpl_dir
+    image_dir = args.img_root
+    seg_dir = args.seg_root
+    normal_dir = args.normal_root
+    smpl_dir = args.smpl_root
     save_root = args.save_root
     garment = args.garment
 
@@ -117,7 +117,7 @@ if __name__ == '__main__':
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
-    scale = 0.8 # 1
+    scale = 0.8 if garment == 'Skirt' else 1
     IMAGE_SIZE = 256
     FL = 5000.
 
@@ -197,4 +197,3 @@ if __name__ == '__main__':
         cv2.imwrite(os.path.join(save_dir, '%s_normal_align.png'%img_name), normal_align)
         cv2.imwrite(os.path.join(save_dir, '%s_seg_align.png'%img_name), seg_align)
         cv2.imwrite(os.path.join(save_dir, '%s_mask_full_align.png'%img_name), mask_full_align)
-        #sys.exit()

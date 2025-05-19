@@ -10,7 +10,7 @@ See [INSTALL.md](docs/INSTALL.md)
 See [INSTALL.md](docs/RECONSTRUCTION.md)
 
 ## Prepare your own data
-If you want to prepare your own data for fitting, please check [DATA_PREPARE.md](docs/DATA_PREPARE.md)
+If you want to prepare your own data for reconstruction, please check [DATA_PREPARE.md](docs/DATA_PREPARE.md)
 
 ## Citation
 If you find our work useful, please cite it as:
