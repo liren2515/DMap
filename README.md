@@ -1,7 +1,7 @@
 # Single View Garment Reconstruction Using Diffusion Mapping Via Pattern Coordinates
 <p align="center"><img src="figs/result.jpg"></p>
 
-This is the repo for [**Single View Garment Reconstruction Using Diffusion Mapping Via Pattern Coordinates**](https://liren2515.github.io/page/DMap/DMap.html).
+This is the repo for [**Single View Garment Reconstruction Using Diffusion Mapping Via Pattern Coordinates**](https://liren2515.github.io/page/dmap/dmap.html).
 
 ## Setup & Install
 See [INSTALL.md](docs/INSTALL.md)
