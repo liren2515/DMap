@@ -7,7 +7,7 @@ This is the repo for [**Single View Garment Reconstruction Using Diffusion Mappi
 See [INSTALL.md](docs/INSTALL.md)
 
 ## Reconstruction
-See [INSTALL.md](docs/RECONSTRUCTION.md)
+See [RECONSTRUCTION.md](docs/RECONSTRUCTION.md)
 
 ## Prepare your own data
 If you want to prepare your own data for reconstruction, please check [DATA_PREPARE.md](docs/DATA_PREPARE.md)
