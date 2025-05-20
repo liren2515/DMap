@@ -16,7 +16,7 @@ If you want to prepare your own data for reconstruction, please check [DATA_PREP
 If you find our work useful, please cite it as:
 ```
 @inproceedings{li2024garment,
-  author = {Li, Ren and Cao, Cong and Dumery, Corentin You, Yingxuan and Li, Hao and Fua, Pascal},
+  author = {Li, Ren and Cao, Cong and Dumery, Corentin and You, Yingxuan and Li, Hao and Fua, Pascal},
   title = {{Single View Garment Reconstruction Using Diffusion Mapping Via Pattern Coordinates}},
   booktitle = {ACM SIGGRAPH 2025 Conference Papers},
   year = {2025}
