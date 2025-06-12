@@ -18,7 +18,9 @@ Use [Sappiens](https://github.com/facebookresearch/sapiens) to get the normal es
 
 
 ## Step 3 - SMPL Body Parameters
-Use [4DHumans](https://github.com/shubham-goel/4D-Humans) to estimate the SMPL parameters for the raw images. We have included a modified demo file `demo_modified.py` in this directory, which is based on the original `demo.py` from 4DHumans. This modified file saves the necessary estimations required by our method. Place it in the root directory of your 4DHumans installation and execute it following the instructions provided in `demo.py` from 4DHumans. Make sure to include the arguments `--full_frame` and `--save_mesh` when running the script.
+Use [4DHumans](https://github.com/shubham-goel/4D-Humans) to estimate the SMPL parameters for the raw images. We have included a modified demo file `demo_modified.py` in this directory, which is based on the original `demo.py` from 4DHumans. This modified file saves the necessary estimations required by our method. Place it in the root directory of your 4DHumans installation and replace `4D-Humans/hmr2/utils/renderer.py` with `renderer.py` in this folder.
+
+Execute `demo_modified.py` following the instructions provided in `demo.py` from 4DHumans. Make sure to include the arguments `--full_frame` and `--save_mesh` when running the script.
 
 Put results in `./observations/smpl-XXX`. You should have some files named as `xxx_all.pt`.
 
