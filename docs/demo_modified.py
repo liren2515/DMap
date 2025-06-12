@@ -18,23 +18,15 @@ def camera_proj(jts, trans, render_res, P):
     camera_center = [render_res[0] / 2., render_res[1] / 2.]
     width = float(render_res[0])
     height = float(render_res[1])
-    #width = float(render_res[1])
-    #height = float(render_res[0])
 
     jts_new = (jts[0].cpu().detach().numpy() + trans[None])
-    print(jts_new.shape, trans.shape, jts.shape)
     jts_new[:,1:] *= -1
     jts_new = np.concatenate((jts_new, np.ones_like(jts_new)[:,:1]), axis=-1)
-    print(jts_new.shape, trans.shape, jts.shape)
     jts_new_p = P@jts_new.T
     jts_new_p=jts_new_p/jts_new_p[3]
-    #jts_new_p = jts_new_p.T
-    #print(jts_new_p)
     jts_new_p[0]=width/2*jts_new_p[0]+width/2         # transformation from [-1,1] -> [0,width]
     jts_new_p[1]=height - (height/2*jts_new_p[1]+height/2)
     jts_new_p = jts_new_p.T
-    #print(jts_new_p)
-    #sys.exit()
     return jts_new_p[:,:2]
 
 def main():
@@ -190,17 +182,14 @@ def main():
                 data_save, os.path.join(args.out_folder, f'{img_fn}_all.pt')
             )
 
-            #print(type(pred_keypoints_3d), type(all_cam_t[n]), pred_keypoints_3d.shape, all_cam_t[n].shape, )
             pred_keypoints_2d_full = camera_proj(pred_keypoints_3d, all_cam_t[n], img_size[n], P)
             pred_keypoints_2d_full = pred_keypoints_2d_full[:22].astype(int)
-            #print(pred_keypoints_2d_full)
             
             crop = img_cv2.copy()
             for point in pred_keypoints_2d_full:
               cv2.circle(crop, point, 10, (255, 0, 0), -1)
-            #crop[pred_keypoints_2d_full[:,1].astype(int), pred_keypoints_2d_full[:,0].astype(int)] = 255
             cv2.imwrite(os.path.join(args.out_folder, 'tmp.png'), crop[:, :, ::-1])
-            #sys.exit()
+
             # Overlay image
             input_img = img_cv2.astype(np.float32)[:,:,::-1]/255.0
             input_img = np.concatenate([input_img, np.ones_like(input_img[:,:,:1])], axis=2) # Add alpha channel
